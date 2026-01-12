@@ -26,14 +26,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.arm.ArmACW;
-import frc.robot.commands.arm.ArmCW;
-import frc.robot.commands.claw.ClawRelease;
-import frc.robot.commands.claw.ClawGrab;
-import frc.robot.commands.elevator.*;
-import frc.robot.subsystems.arm.ArmSubsystem;
-import frc.robot.subsystems.claw.ClawSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.util.FeedbackEngine.FeedbackEngine;
 
@@ -55,10 +47,7 @@ public class RobotContainer {
   public final GenericHID hauteJoystick = new GenericHID(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(
-      new File(Filesystem.getDeployDirectory(), "swerve/neo"));
-  private final ElevatorSubsystem elevatorbase = new ElevatorSubsystem();
-  private final ClawSubsystem clawbase = new ClawSubsystem();
-  private final ArmSubsystem armbase = new ArmSubsystem();
+      new File(Filesystem.getDeployDirectory(), "swerve/neo")); 
   private final SendableChooser<String> autoChooser = new SendableChooser<>();
   private static final String defaultAuto = "testAuto";
 
@@ -117,7 +106,6 @@ public class RobotContainer {
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-    NamedCommands.registerCommand("ElevatorUp", new ElevatorUp(elevatorbase));
     autoChooser.addOption(defaultAuto, defaultAuto);
     autoChooser.setDefaultOption(defaultAuto, defaultAuto);
     SmartDashboard.putData("auto", autoChooser);
@@ -147,14 +135,7 @@ public class RobotContainer {
     Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
     Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
     Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngleKeyboard);
-    Command elevatorMoveToUpPosition = new ElevatorUp(elevatorbase);
-    Command elevatorReturnToHomePosition = new ElevatorReturnHome(elevatorbase);
-    Command armMoveinCockWiseMotion = new ArmCW(armbase);
-    Command armMoveinACockWiseMotion = new ArmACW(armbase);
-    Command clawGrab = new ClawGrab(clawbase);
-    Command clawClose = new ClawRelease(clawbase);
-    Command armCW = new ArmCW(armbase);
-    Command armACW = new ArmACW(armbase);
+
 
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
@@ -205,36 +186,14 @@ public class RobotContainer {
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-
-      // ELEVATOR :0
-      new JoystickButton(hauteJoystick, 1).onTrue(elevatorMoveToUpPosition);
-      new JoystickButton(hauteJoystick, 2).onTrue(elevatorReturnToHomePosition);
-      new JoystickButton(hauteJoystick, 3).onTrue(armMoveinACockWiseMotion);
-      new JoystickButton(hauteJoystick, 4).onTrue(armMoveinCockWiseMotion);
-      //new JoystickButton(hauteJoystick, 5).whileTrue(ClawGrab);
-      driverXbox.y().onTrue(elevatorMoveToUpPosition);
+      
       driverXbox.a().onTrue(
         Commands.sequence(
             Commands.runOnce(drivebase::zeroGyro),
             FeedbackEngine.success(driverXbox) 
         )
     );
-    driverXbox.y().onTrue(
-    elevatorMoveToUpPosition
-        .andThen(FeedbackEngine.success(driverXbox))
-);
-
-driverXbox.b().onTrue(
-    elevatorReturnToHomePosition
-        .andThen(FeedbackEngine.doublePulse(driverXbox)));
-    
-    
-
-
-      /*
-       * 
-       */
-
+  
       
 driverXbox.rightBumper().whileTrue(
     drivebase.centerModulesCommand()
