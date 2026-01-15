@@ -30,13 +30,13 @@ public final class Constants {
   public static final int ControllerConstant = 2;
   // Maximum speed of the robot in meters per second, used to limit acceleration.
 
-  // public static final class AutonConstants
-  // {
-  //
+  public static final class AutonConstants
+  {
+  
   // public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0,
   // 0);
   // public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
-  // }
+  }
 
   public static final class DrivebaseConstants {
 
@@ -54,21 +54,23 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final int MOTOR_ID = 31;
-    public static final boolean MOTOR_INVERTED = false;
+ 
+  }
 
-    public static final int SERVO_PWM = 0;
-    public static final double RATCHET_ENGAGED_DEG = 30;
-    public static final double RATCHET_DISENGAGED_DEG = 120;
+  public static class ThrusterConstants { 
+    // PLEASE NOTE: 
+    // THESE ARE PLACEHOLDER VALUES
+    // BEFORE USE, ADJUST ALL SETTINGS AND VALUES
+    // TEST WITH CAUTION 
 
-    public static final int CLIMB_CURRENT_LIMIT_A = 40;
-    public static final double CLIMB_UP_PCT = 0.90;
-    public static final double LOWER_DOWN_PCT = -0.30; // let rope out
-    public static final double MAX_OUTPUT = 1.0;
+    //       [ FLYWHEEL MOTOR (CONTROLLERS) ]
+    public static final int MOTOR_A_ID = 20; 
+    public static final int MOTOR_B_ID = 21;
 
-    // “Stall” detect
-    public static final double STALL_CURRENT_A = 45.0;
-    public static final double STALL_TIME_S = 0.20;
+    //       [ THRUSTER SETTINGS ]
+    public static final int FLYWHEEL_RPM = 2; // desired revoltuions per minute of the flywheel, integer is internally multiplied x1000 
+    public static final int FLYWHEEL_RAMP_TIME = 2; // how long it takes to get to the desired RPMs, in seconds 
+
   }
 
 }

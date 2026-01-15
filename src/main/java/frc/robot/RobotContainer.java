@@ -167,7 +167,7 @@ public class RobotContainer {
       // new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
     }
 
-
+// ===================[ TEST MODE ONLY ]========================
     if (DriverStation.isTest()) {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
@@ -180,7 +180,7 @@ public class RobotContainer {
       driverXbox.rightBumper().whileTrue(drivebase.centerModulesCommand());
     } else {
 
-      // EVERY OTHER MOD
+     //  ===================[ TELEOP MODE ONLY ]========================
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
