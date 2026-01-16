@@ -73,4 +73,15 @@ public final class Constants {
 
   }
 
+  public static class TurretConstants { 
+
+    //       [ PAN MOTOR (CONTROLLERS) ]
+    public static final int PAN_MOTOR = 23; 
+    public static final int MOTOR_SPEED = 2; 
+    public static final int PAN_THROUGHBORE_ENCODER_CHANNELA = 1; 
+    public static final int PAN_THROUGHBORE_ENCODER_CHANNELB = 1; 
+
+
+  }
+
 }
