@@ -5,12 +5,16 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TurretManualAim extends Command {
   /** Creates a new TurretManualAim. */
-  public TurretManualAim() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final TurretSubsystem turret; 
+
+  public TurretManualAim(TurretSubsystem turret) {
+    this.turret = turret;  
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
