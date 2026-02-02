@@ -33,7 +33,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.subsystems.swervedrive.Vision;
+
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class AimingHoodSubsystem extends SubsystemBase
 {
@@ -46,15 +51,27 @@ public class AimingHoodSubsystem extends SubsystemBase
         this.poseSupplier = poseSupplier;
     }
 
-    public Rotation2d getDesiredAngle(){    
-        Pose2d robotPose = poseSupplier.get();
-        Translation2d toTarget =
-            HUB_POSITION.minus(robotPose.getTranslation());
+    public Optional<Rotation2d> getVisionYaw() {
+    var resultOpt = Vision.Cameras.CENTER_CAM.getLatestResult();
 
-        Rotation2d fieldAngle = toTarget.getAngle();
+    if (resultOpt.isEmpty()) return Optional.empty();
+    var result = resultOpt.get();
 
-        return fieldAngle.minus(robotPose.getRotation());
+    if (!result.hasTargets()) return Optional.empty();
+
+    PhotonTrackedTarget target = result.getBestTarget();
+    return Optional.of(Rotation2d.fromDegrees(target.getYaw()));
+}
+
+
+    public Rotation2d getDesiredAngle() {
+        return getVisionYaw().orElseGet(() -> {
+            Pose2d robotPose = poseSupplier.get();
+            Translation2d toTarget = HUB_POSITION.minus(robotPose.getTranslation());
+            return toTarget.getAngle().minus(robotPose.getRotation());
+        });
     }
+    
 
     @Override
     public void periodic(){
